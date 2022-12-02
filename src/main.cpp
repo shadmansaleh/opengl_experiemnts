@@ -25,7 +25,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void processInput(GLFWwindow *window)
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS
+        || glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
@@ -79,16 +80,30 @@ int main() {
   glDeleteShader(fragmentShader);
 
   // vertices of the triangle
-  GLfloat vertices[] = {-0.5f, -0.5f * float(sqrt(3)) / 3,    0.0f,
-                        0.5f,  -0.5f * float(sqrt(3)) / 3,    0.0f,
-                        0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f};
+  // GLfloat vertices[] = {
+  //   -0.5f, -0.5f * float(sqrt(3)) / 3,    0.0f,
+  //   0.5f,  -0.5f * float(sqrt(3)) / 3,    0.0f,
+  //   0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f
+  // };
+
+  GLfloat rect_vertices[] = {
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left 
+  };
+  unsigned int rect_indices[] = {  // note that we start from 0!
+      0, 1, 3,   // first triangle
+      1, 2, 3    // second triangle
+  };
 
   // VertexArray and VertexBuffer
-  GLuint VAO, VBO;
+  GLuint VAO, VBO, EBO;
 
   // create vertax bufferArray nd vetex buffer
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
+  glGenBuffers(1, &EBO);
 
   // bind the vertexArray as current vertex array
   glBindVertexArray(VAO);
@@ -96,7 +111,10 @@ int main() {
   // bind vertex buffer
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   // attach vertices data to vertexBuffer
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(rect_vertices), rect_vertices, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect_indices), rect_indices, GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
@@ -106,13 +124,7 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  // // set value of background color
-  // glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-  // // clean the buffer and assign the new color to it.
-  // glClear(GL_COLOR_BUFFER_BIT);
-  // // swap back buffer with front buffer.
-  // glfwSwapBuffers(window);
-
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // main loop
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
@@ -122,7 +134,10 @@ int main() {
     // apply shader program
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
     // poll events
     glfwPollEvents();
