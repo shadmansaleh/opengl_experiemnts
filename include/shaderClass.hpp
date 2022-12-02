@@ -17,6 +17,8 @@ class Shader
     Shader(const char* vertexFile, const char* fragmentFile);
     void Activate();
     void Delete();
+  private:
+    void compileErrors(unsigned int shder, const char* type);
 };
 
 #endif // !SHADER_CLASS_HPP

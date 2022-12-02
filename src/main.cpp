@@ -52,12 +52,13 @@ int main() {
 
   // vertices of the triangle
   GLfloat vertices[] = {
-    -0.5f, -0.5f * float(sqrt(3)) / 3,    0.0f, // lower left corner
-    0.5f,  -0.5f * float(sqrt(3)) / 3,    0.0f, // lower right corner
-    0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-    -0.5f/2, 0.5f * float(sqrt(3)) / 6,    0.0f, // Inner left
-    0.5f / 2,  0.5f * float(sqrt(3)) / 6,    0.0f, // inner right
-    0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // inner down
+    //     Co-ordinates                          Colors
+   -0.5f, -0.5f * float(sqrt(3)) / 3,     0.0f,  0.8f, 0.3f, 0.02f, // lower left corner
+    0.5f, -0.5f * float(sqrt(3)) / 3,     0.0f, 0.8f, 0.3f, 0.02f,  // lower right corner
+    0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f, 1.0f, 0.6f, 0.32f,  // upper corner
+   -0.25f, 0.5f * float(sqrt(3)) / 6,     0.0f, 0.9f, 0.45f, 0.17f, // Inner left
+    0.25f, 0.5f * float(sqrt(3)) / 6,     0.0f, 0.9f, 0.45f, 0.17f, // inner right
+    0.0f, -0.5f * float(sqrt(3)) / 3,     0.0f, 0.8f, 0.3f, 0.02f   // inner down
   };
 
   unsigned int indices[] = {  // note that we start from 0!
@@ -78,15 +79,14 @@ int main() {
   VBO VBO1(vertices, sizeof(vertices));
   EBO EBO1(indices, sizeof(indices));
 
-  VBO1.Bind();
-  EBO1.Bind();
-
-  VAO1.LinkVBO(VBO1, 0);
+  VAO1.LinkAtrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+  VAO1.LinkAtrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
   VAO1.Unbind();
   VBO1.Unbind();
   EBO1.Unbind();
 
+  GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // main loop
   while (!glfwWindowShouldClose(window)) {
@@ -96,6 +96,7 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
     // apply shader program
     shaderProgram.Activate();
+    glUniform1f(uniID, 0.5f);
     VAO1.Bind();
     // glDrawArrays(GL_TRIANGLES, 0, 3);
 

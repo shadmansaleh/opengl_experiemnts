@@ -1,4 +1,5 @@
 #include "shaderClass.hpp"
+#include "cstring"
 
 std::string get_file_contents(const char* filename)
 {
@@ -26,10 +27,12 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &vertexShderSource, NULL);
   glCompileShader(vertexShader);
+  compileErrors(vertexShader, "VERTEX");
 
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
+  compileErrors(fragmentShader, "FRAGMENT");
 
   // create a shader program and link the shaders to it
   ID = glCreateProgram();
@@ -49,4 +52,19 @@ void Shader::Activate()
 void Shader::Delete()
 {
   glDeleteProgram(ID);
+}
+
+void Shader::compileErrors(unsigned int shader, const char *type)
+{
+  GLint hasCompiled;
+  char infoLog[1024];
+  // if (strcmp(type, "PROGRAM") == 0)
+  // {
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+    if (hasCompiled == GL_FALSE) 
+    {
+      glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+      std::cout << "Shader Compile Error for: " << type << " => " << infoLog << std::endl;
+    // }
+  }
 }
