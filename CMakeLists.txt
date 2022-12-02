@@ -11,6 +11,7 @@ add_compile_options(
 
 add_link_options(-fsanitize=address)
 
+include_directories(./include)
 include_directories(./libraries/include)
 link_directories(./libraries/lib)
 

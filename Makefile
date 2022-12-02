@@ -1,8 +1,8 @@
 MAIN = openGL_exp
-SRCS = src/main.cpp libraries/src/glad/glad.c
+SRCS = src/main.cpp libraries/src/glad/glad.c src/shaderClass.cpp src/EBO.cpp src/VBO.cpp src/VAO.cpp
 INCLUDES = 
 LIBS = -lGL -lglfw -lX11 -lpthread -lXrandr -lXi -ldl
-CFLAGS = -Wall -O0 -gdwarf-4 -Wextra -pedantic-errors -Weffc++ -std=c++17 -Ilibraries/include/
+CFLAGS = -Wall -O0 -gdwarf-4 -Wextra -pedantic-errors -Weffc++ -std=c++17 -Ilibraries/include/ -Iinclude/
 LFLAGS = -Llibraries/lib
 CC = g++
 OBJS = $(SRCS:.cpp=.o)
