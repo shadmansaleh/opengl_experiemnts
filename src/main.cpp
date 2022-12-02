@@ -16,6 +16,20 @@ const char *fragmentShaderSource =
     "  FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
     "}\n\0";
 
+
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+
 int main() {
   // initialize glfw
   glfwInit();
@@ -34,6 +48,7 @@ int main() {
     glfwTerminate();
     return -1;
   }
+
   // switch to created window
   glfwMakeContextCurrent(window);
 
@@ -42,6 +57,8 @@ int main() {
 
   // create a view port that would be displayed in window
   glViewport(0, 0, 800, 800);
+  // resize view port when window is resized
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
   // create shaders
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -98,6 +115,7 @@ int main() {
 
   // main loop
   while (!glfwWindowShouldClose(window)) {
+    processInput(window);
     // set bg color
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
