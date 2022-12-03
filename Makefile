@@ -1,6 +1,6 @@
 MAIN = openGL_exp
-SRCS = src/main.cpp libraries/src/glad/glad.c src/shaderClass.cpp src/EBO.cpp src/VBO.cpp src/VAO.cpp
-INCLUDES = 
+SRCS = src/main.cpp libraries/src/glad/glad.c libraries/src/stb/stb_image.cpp src/shaderClass.cpp src/EBO.cpp src/VBO.cpp src/VAO.cpp src/textureClass.cpp src/utils.cpp
+INCLUDES =
 LIBS = -lGL -lglfw -lX11 -lpthread -lXrandr -lXi -ldl
 CFLAGS = -Wall -O0 -gdwarf-4 -Wextra -pedantic-errors -Weffc++ -std=c++17 -Ilibraries/include/ -Iinclude/
 LFLAGS = -Llibraries/lib
@@ -17,13 +17,9 @@ $(MAIN):	$(OBJS)
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 clean:
-	$(RM) src/*.o libraries/src/glad/*.o *~ $(MAIN)
+	$(RM) src/*.o libraries/src/glad/*.o libraries/src/std/*.o *~ $(MAIN)
 run :	$(MAIN)
 	./$(MAIN)
-install :	$(MAIN)
-	cp $(MAIN) $(PREFIX)/local/bin
-uninstall :	$(PREFIX)/local/bin/$(MAIN)
-	rm -i $(PREFIX)/local/bin/$(MAIN)
 depend:	$(SRCS)
 	makedepend $(INCLUDES) $^
 
