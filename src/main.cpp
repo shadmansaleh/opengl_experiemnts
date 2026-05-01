@@ -37,7 +37,7 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   // create a new gl window
-  GLFWwindow *window = glfwCreateWindow(800, 800, "YoutubeOpenGL", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(800, 800, "OpenGL", NULL, NULL);
   if (window == NULL) { // error check
     std::cout << "Failed to create window" << std::endl;
     glfwTerminate();
